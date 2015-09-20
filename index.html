@@ -1,0 +1,255 @@
+<html>
+	<head>
+  		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  		<title>Quad Music Reco System</title>
+  		<link href="quad.css" rel="stylesheet" type="text/css" />
+  	</head>
+  	<body>
+  		<script language="javascript" type="text/javascript"> 
+		var userid;
+		var password;
+  		function ajaxFunction()
+		{
+  			var ajaxRequest;   
+   			try
+			{
+     				// Opera Safari & Firefox
+     				ajaxRequest = new XMLHttpRequest();
+   			}
+			catch (e)
+			{
+     				// IE
+     				try
+				{
+        				ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+     				}
+				catch (e)
+				{
+        				try
+					{
+           					ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        				}
+					catch (e)
+					{
+           					// Something went wrong
+           					alert("Something Wrong");
+           					return false;
+        				}
+     				}
+   			}
+   			// Receives data sent back from php
+   			ajaxRequest.onreadystatechange = function()
+			{
+     				if(ajaxRequest.readyState == 4)
+				{
+      					var ajaxDisplay = document.getElementById('templatemo_left_column');
+					var splitArray = ajaxRequest.responseText.split("---");
+					document.getElementById('templatemo_left_column').innerHTML=splitArray[2];
+					document.getElementById('topdownload_section').innerHTML=splitArray[1];
+					document.getElementById('news_section').innerHTML=splitArray[0];
+     				}
+   			}
+			var unam = document.getElementById('email_address').value;
+			userid = unam;
+   			var pw = document.getElementById('password').value;
+			password = pw;
+   			var queryString = "?email_address=" + unam ;
+   			queryString +=  "&password=" + pw;  
+   			ajaxRequest.open("GET", "http://localhost/login.php" + queryString , true);
+   			ajaxRequest.send(); 
+  		}
+
+		//Browser Support Code
+		function LikeThisSong(songID, clusterID, username, password, sectionToBeRefreshed)
+		{
+			var ajaxRequest;
+			try
+			{
+     				// Opera Safari & Firefox
+     				ajaxRequest = new XMLHttpRequest();
+   			}
+			catch (e)
+			{
+     				// IE
+     				try
+				{
+        				ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+     				}
+				catch (e)
+				{
+        				try
+					{
+           					ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        				}
+					catch (e)
+					{
+           					// Something went wrong
+           					alert("Something Wrong");
+           					return false;
+        				}
+     				}
+   			}
+			var songtemp = songID.toString();
+			ajaxRequest.onreadystatechange = function()
+			{
+     				if(ajaxRequest.readyState == 4)
+				{
+					var splitArray = ajaxRequest.responseText;
+					if(splitArray!='')
+					{
+						document.getElementById('news_section').innerHTML=splitArray;
+					}
+     				}
+   			}
+			var queryString = "?song_id=" + songtemp;
+			queryString += "&user_id=" + username;
+			queryString += "&password=" + password;
+			queryString += "&cluster_id=" + clusterID;
+			queryString += "&to_be_refreshed=" + sectionToBeRefreshed;
+			ajaxRequest.open("GET", "http://localhost/LikeHit.php" + queryString , true);
+   			ajaxRequest.send();
+		}
+
+		function RefreshSection(SectionToBeRefreshed)
+		{
+			var ajaxRequest;
+			try
+			{
+     				// Opera Safari & Firefox
+     				ajaxRequest = new XMLHttpRequest();
+   			}
+			catch (e)
+			{
+     				// IE
+     				try
+				{
+        				ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+     				}
+				catch (e)
+				{
+        				try
+					{
+           					ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+        				}
+					catch (e)
+					{
+           					// Something went wrong
+           					alert("Something Wrong");
+           					return false;
+        				}
+     				}
+   			}
+			ajaxRequest.onreadystatechange = function()
+			{
+     				if(ajaxRequest.readyState == 4)
+				{
+					var splitArray = ajaxRequest.responseText;
+					if(SectionToBeRefreshed=='Random')
+					{
+						document.getElementById('news_section').innerHTML=splitArray;
+					}
+					else
+					{
+						document.getElementById('topdownload_section').innerHTML=splitArray;
+					}
+     				}
+   			}
+			var queryString = "?user_id=" + userid;
+			queryString += "&password=" + password;
+			queryString += "&toberefreshed=" + SectionToBeRefreshed;
+			ajaxRequest.open("GET", "http://localhost/RefreshHit.php" + queryString , true);
+   			ajaxRequest.send();
+		}
+  		</script>
+
+  <div id="templatemo_container">
+      <div id="templatemo_header">
+          <div id="templatemo_title">
+              <div id="templatemo_sitetitle">Quad</div>
+          </div>
+          <div id="templatemo_login">
+          </div>
+      </div>
+  
+      <div id="templatemo_banner">
+          <div id="templatemo_banner_text">
+              <div id="banner_title">Welcome To Quad Music Reco System</div>
+              <p>This is a portal where you get song suggestions based on what you like ! </p>
+          </div>
+      </div>
+      
+      <div id="templatemo_menu"> </div> 
+      
+      <div id="templatemo_content">
+          <div id="templatemo_left_column">
+              <h2>Customer Login</h2>
+              <div class="left_col_box">
+                  <form method="get" action="#" onsubmit="return ajaxFunction();">
+                    <div class="form_row">User ID
+                      <input class="inputfield" name="email_address" type="text" id="email_address"/></div>
+                    <div class="form_row"><label>Password</label><input class="inputfield" name="password" type="password" id= "password"/></div>
+                      <input class="button" type="button" name="Submit" value="Login" onclick="ajaxFunction()"/>
+                  </form>
+              </div>
+              
+              <h2>&nbsp;</h2>
+          </div>
+          
+          <div id="templatemo_right_column">
+              <div id="new_released_section">
+                  <h1>Latest Albums</h1>
+                  <div class="new_released_box">
+                  <img src="images/image01(140x140).png" alt="image" width="140" height="140" />
+                      <h3>Pure Heroine</h3> 
+                      <h4>Lorde</h4>  
+                  <div class="rantsection">
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                  </div>
+                  </div>
+                  <div class="new_released_box">
+                  <img src="images/image02(140x140).jpg" alt="image" width="140" height="140" />
+                      <h3>Nothing Was The Same</h3> 
+                      <h4>Drake</h4>  
+                      <div class="rantsection">
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/whitestar.gif" alt="star" />
+                      </div>
+                  </div>
+                  <div class="new_released_box">
+                  <img src="images/image03(140x140).jpg" alt="image" width="140" height="140" />
+                      <h3>Night Visions</h3> 
+                      <h4>Imagine Dragons</h4>  
+                      <div class="rantsection">
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/yellowstar.gif" alt="star" />
+                          <img class="star" src="images/whitestar.gif" alt="star" />
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="templatemo_right_panel_fullwidth">
+                  <div id="news_section">
+                      <h1>Suggested Songs</h1>
+                  </div> 
+                  
+                  <div id="topdownload_section">
+				  <!-- AJAX CONTENT WILL BE PUT IN HERE -->
+                  </div>  
+              </div>                
+              
+          </div>
+      </div>    
+      <div id="templatemo_footer"></div>
+  </div>
+    
+  </body>
+  </html>
